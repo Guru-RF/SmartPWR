@@ -26,7 +26,7 @@ else:
 
 display_bus = displayio.I2CDisplay(i2c, device_address=0x3c)
 
-display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=64)
+display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=64, rotation=180)
 
 # Make the display context
 splash = displayio.Group()

@@ -2,7 +2,15 @@ import board
 import math
 import time
 import analogio
+from digitalio import DigitalInOut, Direction, Pull
 import OLED
+import usb_cdc
+
+serial = usb_cdc.data
+
+btn = DigitalInOut(board.GP15)
+btn.direction = Direction.INPUT
+btn.pull = Pull.UP
 
 rf1Level = analogio.AnalogIn(board.GP26)
 rf2Level = analogio.AnalogIn(board.GP27)
@@ -28,9 +36,15 @@ def rf1_ppower():
             output = round(result * 3.1,4)
             if output < 1:
                 output = output*1000
-                OLED.printPWR('A {message: <13}'.format(message=str(round(output,2))+" mW"))
+                msg = 'A {message: <13}'.format(message=str(round(output,2))+" mW")
+                if serial is not None and serial.connected:
+                    serial.write(str.encode(msg + " Peak\r\n"))
+                OLED.printPWR(msg)
             else:
-                OLED.printPWR('A {message: <13}'.format(message=str(round(output,2))+" W"))
+                msg = 'A {message: <13}'.format(message=str(round(output,2))+" W")
+                if serial is not None and serial.connected:
+                    serial.write(str.encode(msg + " Peak\r\n"))
+                OLED.printPWR(msg)
         else:
             return False
 
@@ -52,8 +66,14 @@ def rf1_apower():
             output = round((sum/counter) * 3.1,4)
             if output < 1:
                 output = output*1000
-                OLED.printPWR('A {message: <13}'.format(message=str(round(output,2))+" mW"))
+                msg = 'A {message: <13}'.format(message=str(round(output,2))+" mW")
+                if serial is not None and serial.connected:
+                    serial.write(str.encode(msg + " Average\r\n"))
+                OLED.printPWR(msg)
             else:
-                OLED.printPWR('A {message: <13}'.format(message=str(round(output,2))+" W"))
+                msg = 'A {message: <13}'.format(message=str(round(output,2))+" W")
+                if serial is not None and serial.connected:
+                    serial.write(str.encode(msg + " Average\r\n"))
+                OLED.printPWR(msg)
         else:
             return False
