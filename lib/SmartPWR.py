@@ -8,18 +8,14 @@ import usb_cdc
 
 serial = usb_cdc.data
 
-btn = DigitalInOut(board.GP15)
+btn = DigitalInOut(board.GP12)
 btn.direction = Direction.INPUT
 btn.pull = Pull.UP
 
 rf1Level = analogio.AnalogIn(board.GP26)
-rf2Level = analogio.AnalogIn(board.GP27)
 
 def rf1_voltage():
     return (rf1Level.value / 65535 * rf1Level.reference_voltage)
-
-def rf2_voltage():
-    return (rf2Level.value / 65535 * rf2Level.reference_voltage)
 
 def rf1_ppower():
     while True:
