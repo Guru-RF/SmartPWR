@@ -5,6 +5,7 @@ import analogio
 from digitalio import DigitalInOut, Direction, Pull
 import OLED
 import usb_cdc
+#import countio
 
 serial = usb_cdc.data
 
@@ -13,6 +14,14 @@ btn.direction = Direction.INPUT
 btn.pull = Pull.UP
 
 rf1Level = analogio.AnalogIn(board.GP26)
+    
+#freqCounter = countio.Counter(board.GP15, edge=countio.Edge.RISE)
+#
+#
+#def freq():
+#    freqCounter.reset()
+#    time.sleep(10)
+#    return freqCounter.count
 
 def rf1_voltage():
     return (rf1Level.value / 65535 * rf1Level.reference_voltage)
@@ -25,11 +34,11 @@ def rf1_ppower():
             if voltage > result:
                 result = voltage
 
-        if result > 0.04:
+        if result > 0.015:
             voltage = rf1_voltage()
             if voltage > result:
                 result = voltage
-            output = round(result * 3.1,4)
+            output = round(result * 5.2,4)
             if output < 1:
                 output = output*1000
                 msg = 'A {message: <13}'.format(message=str(round(output,2))+" mW")
